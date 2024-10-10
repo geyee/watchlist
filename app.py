@@ -68,6 +68,17 @@ class Movie(db.Model): #表名将是 movie
     year = db.Column(db.String(4)) #电影年份
 
 
+@app.context_processor
+def inject_user():
+    user = User.query.first()
+    return dict(user=user)
+
+@app.errorhandler(404)
+def page_not_found(e):
+    user = User.query.first()
+    return render_template('404.html', user=user), 404
+
+
 @app.route('/')
 #@app.route('/index')
 #@app.route('/home')
@@ -98,4 +109,6 @@ def test_url_for():
 
     print(url_for('test_url_for', num=2))
     return 'Test page'
+
+
 
